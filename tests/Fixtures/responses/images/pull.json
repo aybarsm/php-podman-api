@@ -1,0 +1,5 @@
+{"stream":"Trying to pull quay.io/libpod/alpine:latest...\n"}
+{"stream":"Getting image source signatures\n"}
+{"stream":"Copying blob sha256:9d16cba9fb961d1aafec9542f2bf7cb64acfc55245f9e4eb5abecd4cdc38d749\n"}
+{"stream":"Writing manifest to image destination\n"}
+{"images":["9c6f0724472873bb50a2ae67a9e7adcb57673a183cea8b06eb778dca859181b5"],"id":"9c6f0724472873bb50a2ae67a9e7adcb57673a183cea8b06eb778dca859181b5"}

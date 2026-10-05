@@ -1,0 +1,52 @@
+swagger: "2.0"
+basePath: /
+paths:
+  /libpod/widgets/json:
+    get:
+      operationId: WidgetListLibpod
+      tags: [widgets]
+      parameters:
+        - {in: query, name: all, type: boolean}
+      responses:
+        "200": {$ref: '#/responses/widgetList'}
+  /libpod/widgets/{name}/json:
+    get:
+      operationId: WidgetInspectLibpod
+      tags: [widgets]
+      parameters:
+        - {in: path, name: name, type: string, required: true}
+      responses:
+        "200": {schema: {$ref: '#/definitions/WidgetData'}}
+  /libpod/widgets/{name}:
+    delete:
+      operationId: WidgetDeleteLibpod
+      tags: [widgets]
+      parameters:
+        - {in: path, name: name, type: string, required: true}
+      responses:
+        "204": {description: ok}
+  /widgets/json:
+    get:
+      operationId: WidgetListCompat
+      tags: [widgets (compat)]
+      responses:
+        "200": {description: ok}
+responses:
+  widgetList:
+    description: list
+    schema:
+      type: array
+      items: {$ref: '#/definitions/OldWidgetSummary'}
+definitions:
+  OldWidgetSummary:
+    type: object
+    properties:
+      Id: {type: string}
+      Name: {type: string}
+  WidgetData:
+    type: object
+    required: [Id]
+    properties:
+      Id: {type: string}
+      Size: {type: integer}
+      Labels: {type: object, additionalProperties: {type: string}}

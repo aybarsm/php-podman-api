@@ -1,0 +1,39 @@
+[
+  {
+    "Id": "9c6f0724472873bb50a2ae67a9e7adcb57673a183cea8b06eb778dca859181b5",
+    "ParentId": "",
+    "RepoTags": ["quay.io/libpod/alpine:latest"],
+    "RepoDigests": ["quay.io/libpod/alpine@sha256:fa93b01658e3a5a1686dc3ae55f170d8de487006fb53a28efcd12ab0710a2e5f"],
+    "Created": 1576799325,
+    "Size": 5850080,
+    "SharedSize": 0,
+    "VirtualSize": 5850080,
+    "Labels": null,
+    "Containers": 2,
+    "ReadOnly": false,
+    "Names": ["quay.io/libpod/alpine:latest"],
+    "Digest": "sha256:fa93b01658e3a5a1686dc3ae55f170d8de487006fb53a28efcd12ab0710a2e5f",
+    "History": ["quay.io/libpod/alpine:latest"],
+    "IsManifestList": false,
+    "Arch": "amd64",
+    "Os": "linux"
+  },
+  {
+    "Id": "5f2a8e5e1c3d4b6a7f8e9d0c1b2a3f4e5d6c7b8a9f0e1d2c3b4a5f6e7d8c9b0a",
+    "ParentId": "9c6f0724472873bb50a2ae67a9e7adcb57673a183cea8b06eb778dca859181b5",
+    "RepoTags": null,
+    "RepoDigests": null,
+    "Created": 1748773200,
+    "Size": 6120448,
+    "SharedSize": 0,
+    "VirtualSize": 6120448,
+    "Labels": {"org.opencontainers.image.title": "app"},
+    "Containers": 0,
+    "Dangling": true,
+    "Names": null,
+    "Digest": "sha256:0d3c5ee4b8f3a1c2b7e6d5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4",
+    "IsManifestList": false,
+    "Arch": "arm64",
+    "Os": "linux"
+  }
+]

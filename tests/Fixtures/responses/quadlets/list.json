@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "web.container",
+    "UnitName": "web.service",
+    "Path": "/home/user/.config/containers/systemd/web.container",
+    "Status": "active/running",
+    "App": ".web.app",
+    "Pod": "app.pod"
+  },
+  {
+    "Name": "app.pod",
+    "UnitName": "",
+    "Path": "/home/user/.config/containers/systemd/app.pod",
+    "Status": "Not loaded",
+    "App": ""
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "Name": "quay.io/acme/config:v1",
+  "Digest": "sha256:5b0bcabd1ed22e9fb1310cf6c2dec7cdef19f0ad69efa1f392e94a4333501270",
+  "Manifest": {
+    "schemaVersion": 2,
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "artifactType": "application/vnd.acme.config",
+    "config": {
+      "mediaType": "application/vnd.oci.empty.v1+json",
+      "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "size": 2,
+      "data": "e30="
+    },
+    "layers": [
+      {
+        "mediaType": "application/yaml",
+        "digest": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+        "size": 1024,
+        "annotations": {"org.opencontainers.image.title": "app.yaml"}
+      },
+      {
+        "mediaType": "text/plain",
+        "digest": "sha256:60303ae22b998861bce3b28f33eec1be758a213c86c93c076dbe9f558c11c752",
+        "size": 12,
+        "annotations": {"org.opencontainers.image.title": "README.txt"}
+      }
+    ],
+    "annotations": {"org.opencontainers.image.created": "2025-06-01T10:20:30Z"}
+  }
+}

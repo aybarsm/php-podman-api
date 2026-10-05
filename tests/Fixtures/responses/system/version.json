@@ -1,0 +1,16 @@
+{
+  "Platform": {"Name": "linux/arm64/fedora-42"},
+  "Components": [
+    {"Name": "Podman Engine", "Version": "5.5.0", "Details": {"APIVersion": "5.5.0", "Arch": "arm64", "BuildTime": "2025-05-27T00:00:00Z", "Experimental": "false", "GitCommit": "", "GoVersion": "go1.24.3", "KernelVersion": "6.14.9-300.fc42.aarch64", "MinAPIVersion": "4.0.0", "Os": "linux"}},
+    {"Name": "Conmon", "Version": "conmon version 2.1.13", "Details": {"Package": "conmon-2.1.13-1.fc42.aarch64"}}
+  ],
+  "Version": "5.5.0",
+  "ApiVersion": "1.41",
+  "MinAPIVersion": "1.24",
+  "GitCommit": "",
+  "GoVersion": "go1.24.3",
+  "Os": "linux",
+  "Arch": "arm64",
+  "KernelVersion": "6.14.9-300.fc42.aarch64",
+  "BuildTime": "2025-05-27T00:00:00+00:00"
+}

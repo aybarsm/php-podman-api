@@ -1,0 +1,16 @@
+{
+  "Name": "data",
+  "Driver": "local",
+  "Mountpoint": "/var/lib/containers/storage/volumes/data/_data",
+  "CreatedAt": "2025-06-01T10:20:30.123456789Z",
+  "Labels": {"app": "web"},
+  "Scope": "local",
+  "Options": {},
+  "MountCount": 1,
+  "NeedsCopyUp": true,
+  "NeedsChown": true,
+  "LockNumber": 12,
+  "UID": 1000,
+  "GID": 1000,
+  "Anonymous": false
+}

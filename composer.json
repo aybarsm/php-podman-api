@@ -1,9 +1,9 @@
 {
     "name": "aybarsm/podman-api",
-    "description": "",
+    "description": "Typed, resource-oriented PHP client for the Podman Libpod REST API.",
     "type": "library",
     "license": "MIT",
-    "keywords": ["podman", "api-client"],
+    "keywords": ["podman", "libpod", "containers", "api-client"],
     "homepage": "https://github.com/aybarsm/php-podman-api",
     "authors": [
         {
@@ -20,14 +20,41 @@
         "psr/http-factory": "^1.0.1",
         "psr/http-message": "^1.1 || ^2.0"
     },
+    "require-dev": {
+        "pestphp/pest": "^4",
+        "phpstan/phpstan": "^2",
+        "symfony/yaml": "^7"
+    },
+    "suggest": {
+        "ext-curl": "Required to connect over a unix socket (the default Podman transport)."
+    },
     "autoload": {
         "psr-4": {
             "Aybarsm\\Podman\\Api\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Aybarsm\\Podman\\Api\\Dev\\": "dev-tools/src/",
+            "Aybarsm\\Podman\\Api\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@test:unit",
+            "@analyse"
+        ],
+        "test:unit": "pest --testsuite=unit,arch",
+        "test:integration": "pest --testsuite=integration",
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "spec": "php bin/spec"
+    },
     "config": {
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "stable",
     "prefer-stable": true

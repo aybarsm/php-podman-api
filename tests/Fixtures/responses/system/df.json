@@ -1,0 +1,12 @@
+{
+  "ImagesSize": 13467648,
+  "Images": [
+    {"Repository": "docker.io/library/alpine", "Tag": "latest", "ImageID": "9234e8fb04c47cfe0f49931e4ac7eb76fa904e33b7f8576aec0501c085f02516", "Created": "2025-02-14T03:28:36.000000000Z", "Size": 8460800, "SharedSize": 0, "UniqueSize": 8460800, "Containers": 1}
+  ],
+  "Containers": [
+    {"ContainerID": "6c5d4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c", "Image": "9234e8fb04c47cfe0f49931e4ac7eb76fa904e33b7f8576aec0501c085f02516", "Command": ["sleep", "infinity"], "LocalVolumes": 0, "Size": 8460800, "RWSize": 0, "Created": "2025-06-01T10:20:30.123456789+02:00", "Status": "running", "Names": "web"}
+  ],
+  "Volumes": [
+    {"VolumeName": "data", "Links": 1, "Size": 4096, "ReclaimableSize": 0}
+  ]
+}

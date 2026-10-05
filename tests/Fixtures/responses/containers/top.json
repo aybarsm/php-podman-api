@@ -1,0 +1,1 @@
+{"Titles": ["USER", "PID", "PPID", "%CPU", "ELAPSED", "TTY", "TIME", "COMMAND"], "Processes": [["root", "1", "0", "0.000", "2m3.4s", "?", "0s", "nginx: master process nginx -g daemon off;"], ["nginx", "24", "1", "0.000", "2m3.4s", "?", "0s", "nginx: worker process"]]}

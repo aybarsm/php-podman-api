@@ -1,0 +1,25 @@
+[
+  {
+    "Name": "data",
+    "Driver": "local",
+    "Mountpoint": "/var/lib/containers/storage/volumes/data/_data",
+    "CreatedAt": "2025-06-01T10:20:30.123456789Z",
+    "Labels": {"app": "web"},
+    "Scope": "local",
+    "Options": {},
+    "MountCount": 0,
+    "LockNumber": 12
+  },
+  {
+    "Name": "3c5e1f0a9b7d42e8a1f6c0d2b4e8a7f9c1d3e5b7a9c2e4f6a8b0d1c3e5f7a9b1",
+    "Driver": "local",
+    "Mountpoint": "/var/lib/containers/storage/volumes/3c5e1f0a9b7d42e8a1f6c0d2b4e8a7f9c1d3e5b7a9c2e4f6a8b0d1c3e5f7a9b1/_data",
+    "CreatedAt": "2025-06-02T08:00:00Z",
+    "Labels": null,
+    "Scope": "local",
+    "Options": {"type": "tmpfs", "device": "tmpfs", "o": "size=100m"},
+    "MountCount": 0,
+    "Anonymous": true,
+    "LockNumber": 13
+  }
+]

@@ -1,0 +1,4 @@
+{
+  "Removed": ["web.container"],
+  "Errors": {"db.container": "quadlet is running: use force to remove"}
+}

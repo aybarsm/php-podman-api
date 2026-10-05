@@ -1,0 +1,1 @@
+{"stream":"Trying to pull quay.io/libpod/nope:latest...\n"}{"error":"initializing source docker://quay.io/libpod/nope:latest: reading manifest latest in quay.io/libpod/nope: unauthorized"}

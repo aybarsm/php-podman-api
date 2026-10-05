@@ -1,0 +1,19 @@
+{
+  "CanRemove": false,
+  "ContainerID": "6c5d4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c",
+  "DetachKeys": "",
+  "ExitCode": 0,
+  "ID": "9f8e7d6c5b4a39281706f5e4d3c2b1a09f8e7d6c5b4a39281706f5e4d3c2b1a0",
+  "OpenStderr": true,
+  "OpenStdin": false,
+  "OpenStdout": true,
+  "Running": true,
+  "Pid": 4242,
+  "ProcessConfig": {
+    "arguments": ["-c", "echo hello"],
+    "entrypoint": "sh",
+    "privileged": false,
+    "tty": true,
+    "user": "root"
+  }
+}

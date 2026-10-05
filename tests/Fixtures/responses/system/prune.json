@@ -1,0 +1,8 @@
+{
+  "PodPruneReport": null,
+  "ContainerPruneReports": [{"Id": "6c5d4b3a2f1e", "Size": 4096}],
+  "ImagePruneReports": [{"Id": "9234e8fb04c4", "Size": 8460800, "Err": {}}],
+  "NetworkPruneReports": [{"Name": "old-net"}],
+  "VolumePruneReports": null,
+  "ReclaimedSpace": 8464896
+}

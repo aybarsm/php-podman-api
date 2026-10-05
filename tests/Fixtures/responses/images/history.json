@@ -1,0 +1,18 @@
+[
+  {
+    "Id": "9c6f0724472873bb50a2ae67a9e7adcb57673a183cea8b06eb778dca859181b5",
+    "Created": 1576799325,
+    "CreatedBy": "/bin/sh -c #(nop)  CMD [\"/bin/sh\"]",
+    "Tags": ["quay.io/libpod/alpine:latest"],
+    "Size": 0,
+    "Comment": ""
+  },
+  {
+    "Id": "<missing>",
+    "Created": 1576799324,
+    "CreatedBy": "/bin/sh -c #(nop) ADD file:36fdc8cb08228a87093d5b3ee5c9fbf1ab11ee1e1e5a1b2c3d4e5f60718293a in / ",
+    "Tags": null,
+    "Size": 5850080,
+    "Comment": ""
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "quay.io/acme/config:v1",
+    "Manifest": {
+      "schemaVersion": 2,
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "artifactType": "application/vnd.acme.config",
+      "layers": [
+        {
+          "mediaType": "application/yaml",
+          "digest": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+          "size": 1024,
+          "annotations": {"org.opencontainers.image.title": "app.yaml"}
+        }
+      ]
+    }
+  },
+  {
+    "Name": "localhost/models/tiny:latest",
+    "Manifest": {
+      "schemaVersion": 2,
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "layers": null
+    }
+  }
+]

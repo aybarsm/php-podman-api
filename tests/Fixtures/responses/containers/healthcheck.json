@@ -1,0 +1,1 @@
+{"Status": "unhealthy", "FailingStreak": 3, "Log": [{"Start": "2025-06-01T10:21:00Z", "End": "2025-06-01T10:21:01Z", "ExitCode": 1, "Output": "curl: (7) Failed to connect"}]}

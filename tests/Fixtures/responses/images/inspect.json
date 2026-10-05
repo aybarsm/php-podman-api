@@ -1,0 +1,48 @@
+{
+  "Id": "9c6f0724472873bb50a2ae67a9e7adcb57673a183cea8b06eb778dca859181b5",
+  "Digest": "sha256:fa93b01658e3a5a1686dc3ae55f170d8de487006fb53a28efcd12ab0710a2e5f",
+  "RepoTags": ["quay.io/libpod/alpine:latest"],
+  "RepoDigests": ["quay.io/libpod/alpine@sha256:fa93b01658e3a5a1686dc3ae55f170d8de487006fb53a28efcd12ab0710a2e5f"],
+  "Parent": "",
+  "Comment": "",
+  "Created": "2019-12-19T23:48:45.162839066Z",
+  "Config": {
+    "Env": ["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"],
+    "Cmd": ["/bin/sh"],
+    "Labels": {"maintainer": "libpod"},
+    "ExposedPorts": {"8080/tcp": {}},
+    "WorkingDir": "/",
+    "StopSignal": "SIGTERM"
+  },
+  "Version": "18.09.7",
+  "Author": "",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 5850080,
+  "VirtualSize": 5850080,
+  "GraphDriver": {
+    "Name": "overlay",
+    "Data": {"UpperDir": "/var/lib/containers/storage/overlay/abc/diff", "WorkDir": "/var/lib/containers/storage/overlay/abc/work"}
+  },
+  "RootFS": {
+    "Type": "layers",
+    "Layers": ["sha256:77cae8ab23bf486355d1b3191259705374f4a11d483b24964d2f729dd8c076a0"]
+  },
+  "Labels": {"maintainer": "libpod"},
+  "Annotations": {},
+  "ManifestType": "application/vnd.docker.distribution.manifest.v2+json",
+  "User": "",
+  "History": [
+    {
+      "created": "2019-12-19T23:48:44.892358227Z",
+      "created_by": "/bin/sh -c #(nop) ADD file:36fdc8cb08228a87093d5b3ee5c9fbf1ab11ee1e1e5a1b2c3d4e5f60718293a in / "
+    },
+    {
+      "created": "2019-12-19T23:48:45.162839066Z",
+      "created_by": "/bin/sh -c #(nop)  CMD [\"/bin/sh\"]",
+      "empty_layer": true
+    }
+  ],
+  "NamesHistory": ["quay.io/libpod/alpine:latest"],
+  "Healthcheck": {"Test": ["CMD-SHELL", "true"], "Interval": 30000000000, "Retries": 3}
+}

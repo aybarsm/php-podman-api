@@ -1,0 +1,7 @@
+{
+  "Titles": ["USER", "PID", "PPID", "%CPU", "ELAPSED", "TTY", "TIME", "COMMAND"],
+  "Processes": [
+    ["0", "1", "0", "0.000", "5m3.12s", "?", "0s", "/catatonit -P"],
+    ["root", "1", "0", "0.000", "5m2.98s", "?", "0s", "nginx: master process nginx -g daemon off;"]
+  ]
+}

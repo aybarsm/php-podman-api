@@ -1,0 +1,19 @@
+[
+  {
+    "Index": "docker.io",
+    "Name": "docker.io/library/alpine",
+    "Description": "A minimal Docker image based on Alpine Linux",
+    "Stars": 10000,
+    "Official": "[OK]",
+    "Automated": "",
+    "Tag": ""
+  },
+  {
+    "Index": "quay.io",
+    "Name": "quay.io/libpod/alpine",
+    "Description": "",
+    "Stars": 0,
+    "Official": "",
+    "Automated": ""
+  }
+]

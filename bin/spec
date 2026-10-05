@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Aybarsm\Podman\Api\Dev\Console\Application;
+
+$root = dirname(__DIR__);
+require $root.'/vendor/autoload.php';
+
+/** @var list<string> $argv */
+exit((new Application($root))->run($argv));

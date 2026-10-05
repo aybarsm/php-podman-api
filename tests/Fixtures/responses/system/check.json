@@ -1,0 +1,11 @@
+{
+  "Errors": true,
+  "Layers": {"a1b2c3": ["layer content incorrect digest"]},
+  "ROLayers": null,
+  "Images": {"9234e8fb04c4": ["image layer a1b2c3 is missing"]},
+  "ROImages": null,
+  "Containers": null,
+  "RemovedLayers": ["a1b2c3"],
+  "RemovedImages": {"9234e8fb04c4": ["docker.io/library/alpine:latest"]},
+  "RemovedContainers": {"6c5d4b3a2f1e": "web"}
+}

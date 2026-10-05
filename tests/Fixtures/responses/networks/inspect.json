@@ -1,0 +1,24 @@
+{
+  "name": "app-net",
+  "id": "c0ffee93aaaaa2542ba43ef33eb990d0999ee1b9924b557b7be53c0b7a1bb9ab",
+  "driver": "bridge",
+  "network_interface": "podman1",
+  "created": "2025-06-02T09:30:00.5Z",
+  "subnets": [{"subnet": "10.89.0.0/24", "gateway": "10.89.0.1"}],
+  "ipv6_enabled": false,
+  "internal": false,
+  "dns_enabled": true,
+  "labels": {"app": "web"},
+  "ipam_options": {"driver": "host-local"},
+  "containers": {
+    "6c5d4b3a2f1e0d9c8b7a6f5e4d3c2b1a6c5d4b3a2f1e0d9c8b7a6f5e4d3c2b1a": {
+      "name": "web",
+      "interfaces": {
+        "eth0": {
+          "subnets": [{"ipnet": "10.89.0.2/24", "gateway": "10.89.0.1"}],
+          "mac_address": "6a:4f:12:9e:00:01"
+        }
+      }
+    }
+  }
+}
