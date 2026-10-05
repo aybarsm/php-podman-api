@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Aybarsm\Podman\Api\ClientConfig;
 use Aybarsm\Podman\Api\Dto\Shared\Filters;
 use Aybarsm\Podman\Api\Enums\ApiVersion;
+use Aybarsm\Podman\Api\Enums\ParameterGating;
 use Aybarsm\Podman\Api\Exceptions\BadRequestException;
 use Aybarsm\Podman\Api\Exceptions\ConflictException;
 use Aybarsm\Podman\Api\Exceptions\ConnectionException;
@@ -118,6 +120,29 @@ it('rejects operations newer than the configured API version before sending', fu
                 ->and($e->configured)->toBe(ApiVersion::V5_4);
         })
         ->and($mock->requestCount())->toBe(0);
+});
+
+it('gates query parameters newer than the configured API version', function (): void {
+    $mock = MockPodman::withVersion(ApiVersion::V5_7);
+
+    expect(fn () => $mock->transport()->send(Operation::ContainerList, query: ['external' => true]))
+        ->toThrow(function (UnsupportedApiVersionException $e): void {
+            expect($e->parameter)->toBe('external')
+                ->and($e->required)->toBe(ApiVersion::V5_8)
+                ->and($e->getMessage())->toContain('parameterGating: ParameterGating::Off');
+        })
+        ->and($mock->requestCount())->toBe(0);
+});
+
+it('does not gate unset parameters or when gating is off', function (): void {
+    $strict = MockPodman::withVersion(ApiVersion::V5_7)->json([]);
+    $strict->transport()->send(Operation::ContainerList, query: ['external' => null, 'all' => true]);
+
+    $off = (new MockPodman(ClientConfig::unixSocket('/tmp/x.sock', ApiVersion::V5_7)->withParameterGating(ParameterGating::Off)))->json([]);
+    $off->transport()->send(Operation::ContainerList, query: ['external' => true]);
+
+    expect($strict->lastTarget())->toBe('/libpod/containers/json?all=true')
+        ->and($off->lastTarget())->toBe('/libpod/containers/json?external=true');
 });
 
 it('maps error statuses to exceptions carrying the ErrorModel', function (int $status, string $class): void {

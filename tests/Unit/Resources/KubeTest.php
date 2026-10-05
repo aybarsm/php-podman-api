@@ -53,7 +53,7 @@ it('plays Kubernetes YAML', function (): void {
 
     expect($mock->lastRequest()->getMethod())->toBe('POST')
         ->and($mock->lastTarget())->toBe('/libpod/play/kube?annotations={"io.podman/x":"y"}&network=app-net&replace=true&start=false')
-        ->and($mock->lastRequest()->getHeaderLine('Content-Type'))->toBe('plain/text')
+        ->and($mock->lastRequest()->getHeaderLine('Content-Type'))->toBe('text/plain')
         ->and((string) $mock->lastRequest()->getBody())->toBe(KUBE_YAML)
         ->and($report->pods)->toHaveCount(1)
         ->and($report->pods[0]->id)->toStartWith('9f8e7d6c')

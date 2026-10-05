@@ -17,9 +17,10 @@ final class OperationEnumGenerator
     public const string TARGET = 'src/Internal/Operation.php';
 
     /**
-     * @param array<string, string> $since operationId => first spec version
+     * @param array<string, string>                $since           operationId => first spec version
+     * @param array<string, array<string, string>> $parameterSince  operationId => [query parameter => first version]
      */
-    public static function generate(Spec $latest, array $since, string $floorVersion): string
+    public static function generate(Spec $latest, array $since, string $floorVersion, array $parameterSince = []): string
     {
         $ops = array_values($latest->libpodOperations());
         usort($ops, static fn (SpecOperation $a, SpecOperation $b): int => strcmp($a->caseName(), $b->caseName()));
@@ -49,6 +50,22 @@ final class OperationEnumGenerator
                 $byVersion[$version][] = $case;
             }
         }
+
+        $parameterArms = [];
+        foreach ($ops as $op) {
+            $params = $parameterSince[$op->id] ?? [];
+            if ($params === []) {
+                continue;
+            }
+            ksort($params);
+            $entries = [];
+            foreach ($params as $name => $version) {
+                self::assertApiVersionCase($version);
+                $entries[] = "'{$name}' => ApiVersion::".self::versionCase($version);
+            }
+            $parameterArms[] = sprintf('            self::%s => [%s],', $op->caseName(), implode(', ', $entries));
+        }
+        $parameterArms[] = '            default => [],';
 
         ksort($byMethod);
         uksort($byVersion, static fn (string $a, string $b): int => version_compare($a, $b));
@@ -112,6 +129,18 @@ final class OperationEnumGenerator
                 }
 
                 /**
+                 * Query parameters the spec introduces later than the operation itself.
+                 *
+                 * @return array<string, ApiVersion>
+                 */
+                public function queryParameterSince(): array
+                {
+                    return match (\$this) {
+            %PARAMETERS%
+                    };
+                }
+
+                /**
                  * Oldest Podman API version that exposes this operation.
                  */
                 public function since(): ApiVersion
@@ -129,6 +158,7 @@ final class OperationEnumGenerator
             '%METHODS%' => implode("\n", $methodArms),
             '%PATHS%' => implode("\n", $paths),
             '%VERSIONS%' => implode("\n", $versionArms),
+            '%PARAMETERS%' => implode("\n", $parameterArms),
             '%UNVERSIONED%' => implode("\n", [
                 ...($unversioned === [] ? [] : [self::arm($unversioned, 'false')]),
                 '            default => true,',

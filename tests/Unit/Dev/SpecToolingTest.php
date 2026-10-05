@@ -60,6 +60,12 @@ it('computes the first version of every operation in the newest spec', function 
     ]);
 });
 
+it('computes query parameters introduced after their operation', function (): void {
+    expect(SinceCalculator::queryParameters($this->specs->all()))->toBe([
+        'WidgetListLibpod' => ['filters' => '1.1'],
+    ]);
+});
+
 it('falls back to an older spec for degraded (shapeless) definitions, following renames', function (): void {
     $resolver = new DefinitionResolver($this->specs->all());
     $latest = $this->specs->latest();
@@ -125,7 +131,12 @@ it('keeps src/Internal/Operation.php in sync with the newest spec', function ():
     $root = dirname(__DIR__, 3);
     $specs = new SpecRepository($root.'/resources/podman');
 
-    $generated = OperationEnumGenerator::generate($specs->latest(), SinceCalculator::compute($specs->all()), $specs->versions()[0]);
+    $generated = OperationEnumGenerator::generate(
+        $specs->latest(),
+        SinceCalculator::compute($specs->all()),
+        $specs->versions()[0],
+        SinceCalculator::queryParameters($specs->all()),
+    );
 
     expect($generated)->toBe(file_get_contents($root.'/'.OperationEnumGenerator::TARGET));
 });

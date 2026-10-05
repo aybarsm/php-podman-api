@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aybarsm\Podman\Api;
 
 use Aybarsm\Podman\Api\Enums\ApiVersion;
+use Aybarsm\Podman\Api\Enums\ParameterGating;
 use InvalidArgumentException;
 
 /**
@@ -30,6 +31,7 @@ final readonly class ClientConfig
      * @param float                 $timeout        total request timeout in seconds, 0 = none
      * @param float                 $connectTimeout connection timeout in seconds, 0 = none
      * @param array<string, string> $headers        extra headers sent with every request
+     * @param ParameterGating       $parameterGating what to do with query parameters newer than $apiVersion
      */
     public function __construct(
         string $baseUri = self::SOCKET_BASE_URI,
@@ -39,6 +41,7 @@ final readonly class ClientConfig
         public float $connectTimeout = 5.0,
         public array $headers = [],
         public string $userAgent = self::USER_AGENT,
+        public ParameterGating $parameterGating = ParameterGating::Strict,
     ) {
         $scheme = parse_url($baseUri, PHP_URL_SCHEME);
         if (! in_array($scheme, ['http', 'https'], true)) {
@@ -64,7 +67,12 @@ final readonly class ClientConfig
 
     public function withApiVersion(ApiVersion $apiVersion): self
     {
-        return new self($this->baseUri, $this->socketPath, $apiVersion, $this->timeout, $this->connectTimeout, $this->headers, $this->userAgent);
+        return new self($this->baseUri, $this->socketPath, $apiVersion, $this->timeout, $this->connectTimeout, $this->headers, $this->userAgent, $this->parameterGating);
+    }
+
+    public function withParameterGating(ParameterGating $parameterGating): self
+    {
+        return new self($this->baseUri, $this->socketPath, $this->apiVersion, $this->timeout, $this->connectTimeout, $this->headers, $this->userAgent, $parameterGating);
     }
 
     public function usesUnixSocket(): bool

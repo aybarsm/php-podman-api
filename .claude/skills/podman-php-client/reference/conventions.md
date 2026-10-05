@@ -76,7 +76,10 @@ Some Go structs carry 100+ fields: `SpecGenerator` (container create), `PodSpecG
   matches what the CLI sends. Send an explicit `false` only when the spec default is `true`.
 - **Uploads:** string and stream bodies default to `text/plain` and `application/octet-stream`. Always pass
   `contentType:` explicitly (`application/x-tar`, `application/octet-stream`, `application/yaml` and so on) and follow
-  the spec's `consumes` or `Content-Type` header enum literally, even when it is odd (`plain/text` for kube play).
+  the spec's `consumes` or `Content-Type` header enum.
+  - The one exception is a value that is evidently a typo and that a live server rejects. Kube play's `plain/text`
+    gets HTTP 500 from Podman 5.8.2, while `text/plain` works. In that case, send the corrected value and record the
+    evidence in a docblock. This applies only after verifying against a real server, never on a guess.
 - **Null handling:** `toQuery()` returns every param, null included, and the transport drops nulls. `toBody()` also returns nulls, which the transport strips recursively.
 - **Empty maps:** default an optional map or list to `null`, not `[]`, because `[]` serialises as a JSON array and Go cannot decode that into a map.
 - **Filters:** use `?Filters $filters` (from `Dto\Shared\Filters`) for every `filters` param.
@@ -92,8 +95,13 @@ Some Go structs carry 100+ fields: `SpecGenerator` (container create), `PodSpecG
 ## Versioning
 
 - **Operation level:** `Operation::since()` is generated, and the transport throws `UnsupportedApiVersionException` before sending.
-- **Parameter level:** only documented. Add `@since Podman X.Y` on the option property, because Podman ignores unknown query keys.
-  `bin/spec show <Op>` prints `[since X.Y]` for every parameter newer than the operation itself.
+- **Parameter level:** generated into `Operation::queryParameterSince()`. With `ParameterGating::Strict`, the default,
+  the transport throws `UnsupportedApiVersionException` (with `->parameter` set) when a non-null query parameter is newer
+  than the configured version. `ParameterGating::Off` sends everything, and Podman ignores unknown keys.
+  - Older spec files sometimes simply *omitted* parameters the server already accepted, which is why the switch exists.
+  - Add `@since Podman X.Y` on the option property as well. `bin/spec show <Op>` prints `[since X.Y]` for these parameters.
+  - **Never send a gated parameter unconditionally.** Leave it `null` unless the caller set it. If the spec default
+    equals what you want (for example `stream=false` for pod stats), omit the parameter.
   - When a parameter was *renamed* (for example `Ignore` → `ignore` in 5.8), send the name that matches
     `$this->transport->config()->apiVersion` (see `Containers::stop()`).
 - **Field level:** new response fields are always nullable, so older servers hydrate fine.

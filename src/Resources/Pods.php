@@ -191,7 +191,7 @@ final readonly class Pods extends AbstractResource
         $result = $this->transport->send(Operation::PodStatsAll, query: [
             'all' => $all ?: null,
             'namesOrIDs' => $namesOrIds === [] ? null : $namesOrIds,
-            'stream' => false,
+            // `stream` (spec 5.8+) defaults to false; omitting it keeps 5.4-5.7 configurations working.
         ]);
 
         return Data::listOf($result->jsonList(), PodStats::fromArray(...));

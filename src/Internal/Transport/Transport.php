@@ -7,6 +7,7 @@ namespace Aybarsm\Podman\Api\Internal\Transport;
 use Aybarsm\Podman\Api\ClientConfig;
 use Aybarsm\Podman\Api\Contracts\RequestBody;
 use Aybarsm\Podman\Api\Dto\Shared\Filters;
+use Aybarsm\Podman\Api\Enums\ParameterGating;
 use Aybarsm\Podman\Api\Exceptions\ConnectionException;
 use Aybarsm\Podman\Api\Exceptions\RequestException;
 use Aybarsm\Podman\Api\Exceptions\UnsupportedApiVersionException;
@@ -58,7 +59,7 @@ final readonly class Transport
         array $headers = [],
         ?string $contentType = null,
     ): Result {
-        $this->assertSupported($operation);
+        $this->assertSupported($operation, $query);
 
         $request = $this->requests
             ->createRequest($operation->method()->value, $this->uri($operation, $path, $query))
@@ -104,11 +105,26 @@ final readonly class Transport
         return $qs === '' ? $uri : $uri.'?'.$qs;
     }
 
-    private function assertSupported(Operation $operation): void
+    /**
+     * @param array<string, scalar|list<scalar>|Filters|null> $query
+     */
+    private function assertSupported(Operation $operation, array $query): void
     {
+        $configured = $this->config->apiVersion;
         $required = $operation->since();
-        if (! $this->config->apiVersion->isAtLeast($required)) {
-            throw new UnsupportedApiVersionException($operation->value, $required, $this->config->apiVersion);
+        if (! $configured->isAtLeast($required)) {
+            throw new UnsupportedApiVersionException($operation->value, $required, $configured);
+        }
+
+        if ($this->config->parameterGating === ParameterGating::Off) {
+            return;
+        }
+        foreach ($operation->queryParameterSince() as $parameter => $since) {
+            $value = $query[$parameter] ?? null;
+            $isSet = $value !== null && ! ($value instanceof Filters && $value->isEmpty());
+            if ($isSet && ! $configured->isAtLeast($since)) {
+                throw new UnsupportedApiVersionException($operation->value, $since, $configured, $parameter);
+            }
         }
     }
 

@@ -22,8 +22,11 @@ use Psr\Http\Message\StreamInterface;
  */
 final readonly class Kube extends AbstractResource
 {
-    /** PlayKubeLibpod Content-Type for a YAML body (the spec's literal enum value) */
-    private const string YAML = 'plain/text';
+    /**
+     * PlayKubeLibpod Content-Type for a YAML body. The spec's enum says "plain/text", a transposed "text/plain":
+     * Podman 5.8.2 rejects the literal with HTTP 500 and accepts text/plain (verified against a live server).
+     */
+    private const string YAML = 'text/plain';
 
     /** PlayKubeLibpod Content-Type for a tar archive holding play.yaml plus build contexts */
     private const string TAR = 'application/x-tar';

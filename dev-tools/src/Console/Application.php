@@ -318,6 +318,7 @@ final class Application
             $this->specs->latest(),
             SinceCalculator::compute($this->specs->all()),
             $versions[0] ?? throw new RuntimeException('No specs found'),
+            SinceCalculator::queryParameters($this->specs->all()),
         );
 
         $target = $this->root.'/'.OperationEnumGenerator::TARGET;

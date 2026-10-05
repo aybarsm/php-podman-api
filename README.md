@@ -73,6 +73,11 @@ PodmanClient::create(
 );
 ```
 
+**Query parameters are gated too.** Setting a parameter that the spec only introduces in a newer version (for example
+`ContainerListOptions::$external`, 5.8) throws before sending. Older spec files occasionally omitted parameters that
+servers already accepted. If you hit one of those, opt out with
+`new ClientConfig(..., parameterGating: ParameterGating::Off)`.
+
 **Pin the version your server speaks.** `ApiVersion::fromServerVersion($podman->system()->version()->version)` maps a server version such as `5.6.2` to the right case. If you call an operation the configured version doesn't have (for example `artifacts()` before 5.6), the client throws `UnsupportedApiVersionException` without contacting the server.
 
 ## Resources

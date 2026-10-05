@@ -168,7 +168,7 @@ it('reads pod stats without streaming', function (): void {
     $stats = $mock->client()->pods()->stats(['web', 'db']);
 
     expect($mock->lastRequest()->getMethod())->toBe('GET')
-        ->and($mock->lastTarget())->toBe('/libpod/pods/stats?namesOrIDs=web&namesOrIDs=db&stream=false')
+        ->and($mock->lastTarget())->toBe('/libpod/pods/stats?namesOrIDs=web&namesOrIDs=db')
         ->and($stats)->toHaveCount(1)
         ->and($stats[0]->pod)->toBe('9f8e7d6c5b4a')
         ->and($stats[0]->containerId)->toBe('b2c3d4e5f607')
@@ -181,7 +181,7 @@ it('reads stats for all pods', function (): void {
     $mock = mockPodman()->json([]);
 
     expect($mock->client()->pods()->stats(all: true))->toBe([])
-        ->and($mock->lastTarget())->toBe('/libpod/pods/stats?all=true&stream=false');
+        ->and($mock->lastTarget())->toBe('/libpod/pods/stats?all=true');
 });
 
 it('prunes pods from the list Podman returns', function (): void {

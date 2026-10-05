@@ -434,6 +434,38 @@ enum Operation: string
     }
 
     /**
+     * Query parameters the spec introduces later than the operation itself.
+     *
+     * @return array<string, ApiVersion>
+     */
+    public function queryParameterSince(): array
+    {
+        return match ($this) {
+            self::ArtifactAdd => ['replace' => ApiVersion::V5_7],
+            self::ContainerList => ['external' => ApiVersion::V5_8, 'last' => ApiVersion::V5_8],
+            self::ContainerMount => ['external' => ApiVersion::V5_8],
+            self::ContainerResize => ['running' => ApiVersion::V5_8],
+            self::ContainerRestart => ['timeout' => ApiVersion::V5_8],
+            self::ContainerRestore => ['tcpClose' => ApiVersion::V5_7],
+            self::ContainerStop => ['ignore' => ApiVersion::V5_8],
+            self::ContainersStatsAll => ['all' => ApiVersion::V5_8],
+            self::ExecResize => ['running' => ApiVersion::V5_8],
+            self::GenerateSystemd => ['templateUnitFile' => ApiVersion::V5_8],
+            self::ImageBuild => ['additionalbuildcontexts' => ApiVersion::V5_6, 'createdannotation' => ApiVersion::V5_6, 'inheritannotations' => ApiVersion::V5_6, 'inheritlabels' => ApiVersion::V5_5, 'manifest' => ApiVersion::V5_7, 'rewritetimestamp' => ApiVersion::V5_6, 'sourcedateepoch' => ApiVersion::V5_6, 'timestamp' => ApiVersion::V5_6, 'unsetannotation' => ApiVersion::V5_6],
+            self::ImageDelete => ['ignore' => ApiVersion::V5_8, 'lookupManifest' => ApiVersion::V5_8],
+            self::ImagePull => ['pullProgress' => ApiVersion::V5_8],
+            self::NetworkCreate => ['ignoreIfExists' => ApiVersion::V5_8],
+            self::PodDelete => ['timeout' => ApiVersion::V5_8],
+            self::PodStatsAll => ['delay' => ApiVersion::V5_8, 'stream' => ApiVersion::V5_8],
+            self::SecretCreate => ['ignore' => ApiVersion::V5_8, 'replace' => ApiVersion::V5_8],
+            self::SystemPrune => ['all' => ApiVersion::V5_8, 'build' => ApiVersion::V5_8, 'external' => ApiVersion::V5_8, 'filters' => ApiVersion::V5_8, 'volumes' => ApiVersion::V5_8],
+            self::VolumeDelete => ['timeout' => ApiVersion::V5_8],
+            self::VolumePrune => ['dryrun' => ApiVersion::V5_8],
+            default => [],
+        };
+    }
+
+    /**
      * Oldest Podman API version that exposes this operation.
      */
     public function since(): ApiVersion

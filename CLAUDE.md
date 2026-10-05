@@ -102,13 +102,17 @@ PodmanApiException (abstract)
 
 - **v5.8 is degraded.** About 40 definitions reachable from Libpod operations are bare `type: object`, including `ListContainer`, `ImageSummary` and most `*Report` types. Routes and params in v5.8 are reliable, but shapes are not. `bin/spec show/scaffold` automatically falls back to the newest older spec that has the shape, following renames (for example `ImageSummary` → v5.7 `LibpodImageSummary`). Run `bin/spec degraded` to see the full list.
 - **Path params are `rawurlencode`d.** Podman uses `UseEncodedPath()`, so `quay.io/a/b:tag` is sent as a single segment.
+- **Parameter gating:** query parameters newer than `ClientConfig::$apiVersion` throw under `ParameterGating::Strict`,
+  the default (`Operation::queryParameterSince()`, generated). Resources must never send such a parameter unless the
+  caller set it.
 - **Query parameter quirks:**
   - `filters` is JSON; use `Dto\Shared\Filters`.
   - Lists repeat the key.
   - Booleans are `true`/`false`.
-  - Unknown query params are ignored by Podman, so param-level version differences are documented with `@since` in option DTOs and are not gated.
+  - Unknown query params are ignored by Podman. Param-level gating can be switched off with `ParameterGating::Off`.
 - **304** comes back from start/stop/init when the container is already in that state. It is not an error.
 - **`X-Registry-Auth` is base64url JSON.** Build it with `Dto\Shared\RegistryAuth::toHeader()`.
+- **Kube play YAML is sent as `text/plain`.** The spec's `plain/text` enum literal is a typo that Podman 5.8.2 rejects with HTTP 500 (verified live).
 - **`_ping` is unversioned.** The spec says so in the operation description, and the generator turns that into `Operation::isVersioned()`, so the transport omits the `/v{version}` prefix for it.
 - **Progress bodies** (pull, push, load and similar) are several JSON documents concatenated together. Read them with `Result::jsonDocuments()`.
 - **Empty request bodies are sent as `{}`.** Go structs reject `[]`.
