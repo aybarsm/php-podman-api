@@ -112,6 +112,8 @@ PodmanApiException (abstract)
   - Unknown query params are ignored by Podman. Param-level gating can be switched off with `ParameterGating::Off`.
 - **304** comes back from start/stop/init when the container is already in that state. It is not an error.
 - **`X-Registry-Auth` is base64url JSON.** Build it with `Dto\Shared\RegistryAuth::toHeader()`.
+- **Stats-all wraps its samples.** The spec says a bare `ContainerStats`, but Podman 5.8 sends `{"Error": …, "Stats": [ContainerStats]}`. Both shapes are accepted.
+- **Logs are always multiplexed,** even for TTY containers, with no Content-Type header. `stdout` and/or `stderr` must be requested, otherwise the server answers 400.
 - **Kube play YAML is sent as `text/plain`.** The spec's `plain/text` enum literal is a typo that Podman 5.8.2 rejects with HTTP 500 (verified live).
 - **`_ping` is unversioned.** The spec says so in the operation description, and the generator turns that into `Operation::isVersioned()`, so the transport omits the `/v{version}` prefix for it.
 - **Progress bodies** (pull, push, load and similar) are several JSON documents concatenated together. Read them with `Result::jsonDocuments()`.
@@ -132,11 +134,12 @@ PodmanApiException (abstract)
 - **In scope:** every non-streaming Libpod operation.
 - **Out of scope:** the Docker-compat API (`/containers/…` without `/libpod`).
 - **Deferred:** everything listed in `dev-tools/deferred-operations.php`.
-  - Streaming and hijacked operations: attach, logs, stats (`stream`), events, exec start, build.
+  - Streaming and hijacked operations: attach, events, exec start, build, plus single-container stats (deprecated by the spec).
+  - `logs()` and `statsAll()` are implemented in bounded form only: no follow, `stream=false`. The multiplexed frame format is documented on ContainerAttachLibpod, and `Internal\Support\MultiplexedStream` decodes it.
   - Operations whose spec omits a needed body: container/image changes, checkpoint/restore, image resolve, kube down.
 
 ## Testing
 
 - **Unit tests** use `Tests\Support\MockPodman`, a Guzzle `MockHandler` injected as the PSR-18 client with request history. Assert the URL (`lastTarget()`), the body (`lastJsonBody()`) and the hydrated DTOs. JSON fixtures live in `tests/Fixtures/responses/{resource}/` and must match spec shapes.
 - **Arch tests** (`tests/Arch`) enforce the conventions above. Do not weaken them; fix the code.
-- **Integration tests** (`tests/Integration`) skip themselves unless `PODMAN_SOCKET` is set. On macOS, get the socket from `podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}'`.
+- **Integration tests** (`tests/Integration`) skip themselves unless `PODMAN_SOCKET` is set. They have been verified on Podman 5.8.2 (rootless, AlmaLinux 10) with PHP 8.3 and 8.5. Wire-format findings from those runs are recorded in "Spec quirks" (stats wrapper, logs always multiplexed, kube play content type). On macOS, get the socket from `podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}'`.

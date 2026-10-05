@@ -9,12 +9,15 @@ use Aybarsm\Podman\Api\Dto\Container\ContainerCreateResult;
 use Aybarsm\Podman\Api\Dto\Container\ContainerCreateSpec;
 use Aybarsm\Podman\Api\Dto\Container\ContainerInspect;
 use Aybarsm\Podman\Api\Dto\Container\ContainerListOptions;
+use Aybarsm\Podman\Api\Dto\Container\ContainerLogsOptions;
 use Aybarsm\Podman\Api\Dto\Container\ContainerRemoveOptions;
 use Aybarsm\Podman\Api\Dto\Container\ContainerRemoveReport;
+use Aybarsm\Podman\Api\Dto\Container\ContainerStats;
 use Aybarsm\Podman\Api\Dto\Container\ContainerSummary;
 use Aybarsm\Podman\Api\Dto\Container\ContainerTop;
 use Aybarsm\Podman\Api\Dto\Container\ContainerUpdateRequest;
 use Aybarsm\Podman\Api\Dto\Container\HealthCheckResults;
+use Aybarsm\Podman\Api\Dto\Container\LogLine;
 use Aybarsm\Podman\Api\Dto\Shared\Filters;
 use Aybarsm\Podman\Api\Dto\Shared\PruneReport;
 use Aybarsm\Podman\Api\Enums\ApiVersion;
@@ -23,8 +26,10 @@ use Aybarsm\Podman\Api\Exceptions\ConflictException;
 use Aybarsm\Podman\Api\Exceptions\ForbiddenException;
 use Aybarsm\Podman\Api\Exceptions\HydrationException;
 use Aybarsm\Podman\Api\Exceptions\NotFoundException;
+use Aybarsm\Podman\Api\Exceptions\ServerException;
 use Aybarsm\Podman\Api\Internal\Operation;
 use Aybarsm\Podman\Api\Internal\Support\Data;
+use Aybarsm\Podman\Api\Internal\Support\MultiplexedStream;
 use Aybarsm\Podman\Api\Internal\Support\Query;
 use JsonException;
 use Psr\Http\Message\StreamInterface;
@@ -32,7 +37,8 @@ use Psr\Http\Message\StreamInterface;
 /**
  * Libpod `containers` operations.
  *
- * Deferred (see dev-tools/deferred-operations.php): attach, logs, stats, changes, checkpoint, restore.
+ * Deferred (see dev-tools/deferred-operations.php): attach, single-container stats, changes, checkpoint, restore.
+ * logs() and statsAll() are bounded (no follow / no streaming).
  * Kube/systemd generation and play live in the Kube resource.
  */
 final readonly class Containers extends AbstractResource
@@ -211,6 +217,63 @@ final readonly class Containers extends AbstractResource
         );
 
         return ContainerTop::fromArray($result->jsonObject());
+    }
+
+    /**
+     * Container output available at the time of the request (`podman logs` without --follow).
+     *
+     * Podman multiplexes stdout/stderr (also for TTY containers); frames are decoded per the stream format the spec
+     * documents on ContainerAttachLibpod.
+     *
+     * @return list<LogLine>
+     *
+     * @throws NotFoundException
+     */
+    public function logs(string $nameOrId, ?ContainerLogsOptions $options = null): array
+    {
+        $options ??= new ContainerLogsOptions();
+        $body = $this->transport->send(Operation::ContainerLogs, ['name' => $nameOrId], $options->toQuery())->text();
+
+        $lines = [];
+        foreach (MultiplexedStream::frames($body) as [$stream, $payload]) {
+            array_push($lines, ...LogLine::fromFrame($stream, $payload, $options->timestamps));
+        }
+
+        return $lines;
+    }
+
+    /**
+     * One resource-usage sample per container (`podman stats --no-stream`).
+     *
+     * The spec documents a single ContainerStats; Podman 5.8 wraps samples as {"Error": …, "Stats": [ContainerStats]}.
+     * Both shapes are accepted.
+     *
+     * @param list<string> $namesOrIds empty = all running containers
+     * @param bool         $all        include stopped containers (spec 5.8+)
+     *
+     * @return list<ContainerStats>
+     *
+     * @throws NotFoundException
+     * @throws ServerException when Podman reports an error inside a 200 response
+     */
+    public function statsAll(array $namesOrIds = [], bool $all = false): array
+    {
+        $result = $this->transport->send(
+            Operation::ContainersStatsAll,
+            query: ['containers' => $namesOrIds === [] ? null : $namesOrIds, 'all' => $all ?: null, 'stream' => false],
+        );
+
+        $items = $result->jsonListOrObject();
+        $report = $items[0] ?? null;
+        if (count($items) === 1 && is_array($report) && array_key_exists('Stats', $report)) {
+            $error = Data::errorOrNull($report, 'Error');
+            if ($error !== null) {
+                throw new ServerException(Operation::ContainersStatsAll->value, $result->status, $error);
+            }
+            $items = Data::list($report, 'Stats');
+        }
+
+        return Data::listOf($items, ContainerStats::fromArray(...));
     }
 
     /**

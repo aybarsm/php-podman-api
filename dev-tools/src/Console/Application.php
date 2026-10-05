@@ -29,7 +29,9 @@ final class Application
         Commands:
           versions                         List available spec versions
           ops [--tag=T] [--all]            List Libpod operations (--all includes compat) with their minimum version
-          show <OperationId|Definition>    Show an operation (params, responses) or a definition (properties)
+          show <OperationId|Definition> [--def]
+                                           Show an operation (params, responses) or a definition (properties);
+                                           --def forces the definition when both share a name
           diff <from> <to> [--all]         Structural diff between two spec versions (Libpod-reachable by default)
           degraded [--spec=X.Y]            Libpod definitions emitted without a shape, and the older spec that describes them
           since                            First spec version for every Libpod operation in the newest spec
@@ -124,7 +126,7 @@ final class Application
         $name = $args[0] ?? throw new RuntimeException('show requires an operationId or definition name');
         $spec = $this->spec($opts);
 
-        $op = $spec->operation($name.'Libpod') ?? $spec->operation($name);
+        $op = isset($opts['def']) ? null : ($spec->operation($name.'Libpod') ?? $spec->operation($name));
         if ($op !== null) {
             $this->printOperation($op, $spec);
 

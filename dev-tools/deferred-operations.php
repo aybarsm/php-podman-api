@@ -16,11 +16,9 @@ return [
     'ImageResolve' => 'spec documents no response body (204: no body); real body is a JSON list of resolved names',
     'PlayKubeDown' => 'spec documents no request body, but the route needs the Kubernetes YAML to tear down',
     'ContainerAttach' => 'streaming: hijacked connection (HTTP 101 upgrade)',
-    'ContainerLogs' => 'streaming: multiplexed stdout/stderr frames, follow mode',
-    'ContainerStats' => 'streaming: NDJSON when stream=true',
-    'ContainersStatsAll' => 'streaming: NDJSON when stream=true',
+    'ContainerStats' => 'deprecated by the spec in favour of ContainersStatsAll (Containers::statsAll()); documents no body',
     'ExecStart' => 'streaming: hijacked connection for attached exec sessions',
     'ImageBuild' => 'streaming: tar context upload + NDJSON progress',
     'LocalBuild' => 'streaming: NDJSON build progress',
-    'SystemEvents' => 'streaming: NDJSON event stream',
+    'SystemEvents' => 'streaming NDJSON feed, and the spec documents no event schema',
 ];

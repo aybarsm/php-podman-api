@@ -25,6 +25,7 @@ composer require aybarsm/podman-api
 use Aybarsm\Podman\Api\PodmanClient;
 use Aybarsm\Podman\Api\Dto\Container\ContainerCreateSpec;
 use Aybarsm\Podman\Api\Dto\Container\ContainerListOptions;
+use Aybarsm\Podman\Api\Dto\Container\ContainerLogsOptions;
 use Aybarsm\Podman\Api\Dto\Container\PortMapping;
 use Aybarsm\Podman\Api\Dto\Shared\Filters;
 
@@ -49,6 +50,10 @@ foreach ($podman->containers()->list(new ContainerListOptions(filters: Filters::
 $inspect = $podman->containers()->inspect('web');
 $inspect->state->running;                            // bool
 $inspect->env();                                     // ['PATH' => '…', …]
+
+foreach ($podman->containers()->logs('web', new ContainerLogsOptions(tail: 20)) as $line) {
+    echo $line->stream->value, ': ', $line->text, PHP_EOL;  // stdout/stderr demultiplexed
+}
 
 $podman->containers()->stop('web', timeout: 5);
 $podman->containers()->remove('web');
@@ -85,7 +90,7 @@ servers already accepted. If you hit one of those, opt out with
 | Accessor | Covers |
 |---|---|
 | `system()` | ping, info, version, disk usage, prune, storage check |
-| `containers()` | list, inspect, create, start/stop/restart/kill, pause/unpause, init, wait, top, rename, update, healthcheck, mount, archive get/put, export, commit, prune, remove |
+| `containers()` | list, inspect, create, start/stop/restart/kill, pause/unpause, init, wait, top, logs, statsAll, rename, update, healthcheck, mount, archive get/put, export, commit, prune, remove |
 | `images()` | list, inspect, pull, push, tag/untag, history, tree, search, save/load, import, scp, prune, remove |
 | `manifests()` | create, inspect, modify, push, remove |
 | `pods()` | list, inspect, create, start/stop/restart/kill, pause/unpause, top, stats, prune, remove |
@@ -122,7 +127,7 @@ Everything thrown by this package extends `Aybarsm\Podman\Api\Exceptions\PodmanA
 
 ## Not supported (yet)
 
-- **Streaming and hijacked endpoints:** attach, logs, stats streaming, events, exec start, image build.
+- **Streaming and hijacked endpoints:** attach, `logs --follow`, stats streaming, events, exec start, image build. `logs()` and `statsAll()` return a bounded snapshot.
 - **Operations whose spec omits a body they need:** container/image changes, checkpoint/restore, image resolve, kube down.
 - **The Docker-compatible API.**
 
