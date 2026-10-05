@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-05
+
 ### Added
 
 - Typed client for the Podman **Libpod** REST API (Podman API 5.4–5.8). Its entry point is `PodmanClient`, built with the `unixSocket()`, `tcp()` or `create()` factories. `create()` accepts any PSR-18 client and PSR-17 factories.
@@ -21,3 +23,6 @@ All notable changes to this project are documented here. The format follows [Kee
 
 See `dev-tools/deferred-operations.php`.
 - The Docker-compatible API surface.
+
+[Unreleased]: https://github.com/aybarsm/php-podman-api/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/aybarsm/php-podman-api/releases/tag/v0.1.0
